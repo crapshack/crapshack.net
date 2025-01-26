@@ -28,6 +28,7 @@
 
 	a {
 		text-decoration: underline;
+		color: #5AA6ED;
 	}
 
 		a:hover {
@@ -36,97 +37,18 @@
 
 	strong, b {
 		font-weight: 400;
+		color: #555;
 	}
 
 	p {
 		margin: 0 0 2rem 0;
 	}
 
-	h1, h2, h3, h4, h5, h6 {
-		font-weight: 400;
-		line-height: 1.5;
-		margin: 0 0 1.5rem 0;
-	}
-
-		h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
-			color: inherit;
-			text-decoration: none;
-		}
-
-	h2 {
-		font-size: 1.75rem;
-		text-transform: uppercase;
-	}
-
-		@media screen and (max-width: 736px) {
-			h2 {
-				font-size: 1.5rem;
-			}
-		}
-
-	h3 {
-		font-size: 1.35rem;
-		text-transform: uppercase;
-	}
-
-	h4 {
-		font-size: 1.1rem;
-	}
-
-	h5 {
-		font-size: 0.9rem;
-	}
-
-	h6 {
-		font-size: 0.7rem;
-	}
-
-	sub {
-		font-size: 0.8rem;
-		position: relative;
-		top: 0.5rem;
-	}
-
-	sup {
-		font-size: 0.8rem;
-		position: relative;
-		top: -0.5rem;
-	}
-
-	blockquote {
-		border-left: solid 4px;
-		font-style: italic;
-		margin: 0 0 2rem 0;
-		padding: 0.5rem 0 0.5rem 2rem;
-	}
-
-	code {
-		border-radius: 4px;
-		border: solid 1px;
-		font-family: "Courier New", monospace;
-		font-size: 0.9rem;
-		margin: 0 0.25rem;
-		padding: 0.25rem 0.65rem;
-	}
-
-	pre {
-		-webkit-overflow-scrolling: touch;
-		font-family: "Courier New", monospace;
-		font-size: 0.9rem;
-		margin: 0 0 2rem 0;
-	}
-
-		pre code {
-			display: block;
-			line-height: 1.75;
-			padding: 1rem 1.5rem;
-			overflow-x: auto;
-		}
-
 	hr {
 		border: 0;
 		border-bottom: solid 1px;
 		margin: 2rem 0;
+		border-bottom-color: rgba(144, 144, 144, 0.25);
 	}
 
 		hr.major {
@@ -147,31 +69,6 @@
 
 	input, select, textarea {
 		color: #555;
-	}
-
-	a {
-		color: #5AA6ED;
-	}
-
-	strong, b {
-		color: #555;
-	}
-
-	h1, h2, h3, h4, h5, h6 {
-		color: #555;
-	}
-
-	blockquote {
-		border-left-color: rgba(144, 144, 144, 0.25);
-	}
-
-	code {
-		background: rgba(144, 144, 144, 0.075);
-		border-color: rgba(144, 144, 144, 0.25);
-	}
-
-	hr {
-		border-bottom-color: rgba(144, 144, 144, 0.25);
 	}
 
 /* List */
@@ -413,27 +310,6 @@
 				padding-right: 1.25em;
 			}
 
-			@media screen and (max-width: 736px) {
-				#header > a {
-					padding: 0 0.5em;
-				}
-
-					#header > a + a[href="#menu"]:last-child {
-						padding-left: 1em;
-						margin-left: 0.25em;
-					}
-
-					#header > a:last-child {
-						padding-right: 1em;
-					}
-			}
-
-		#header.reveal {
-			-moz-animation: reveal-header 0.5s ease;
-			-webkit-animation: reveal-header 0.5s ease;
-			-ms-animation: reveal-header 0.5s ease;
-			animation: reveal-header 0.5s ease;
-		}
 
 		#header.alt {
 			-moz-animation: none;
@@ -482,7 +358,7 @@
 
 /* Menu */
 
-	#menu {
+		#menu {
 		-moz-transform: translateX(20em);
 		-webkit-transform: translateX(20em);
 		-ms-transform: translateX(20em);

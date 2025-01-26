@@ -16,9 +16,10 @@ function randomtext() {
 		'shut up kiss me hold me tight',
 		'a dead dream',
 		'please clap',
-		'this must be the place'
+		'this must be the place',
+		'dad\'s favorite'
 	];
-    return randomtxt[Math.floor((Math.random() * 16.99))];
+    return randomtxt[Math.floor((Math.random() * 17.99))];
 }
 
 document.getElementById("words").innerHTML = randomtext();
