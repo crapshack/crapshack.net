@@ -1,8 +1,3 @@
-/*
-	Originally based on a template from templated.co
-	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
-*/
-
 @charset "UTF-8";
 @import url(font-awesome.min.css);
 @import url(reset.css);
@@ -96,6 +91,8 @@
 			#header > a[href="#menu"] {
 				text-decoration: none;
 				-webkit-tap-highlight-color: transparent;
+				position: relative;
+				transition: color 0.3s ease;
 			}
 
 				#header > a[href="#menu"]:before {
@@ -106,10 +103,17 @@
 					font-style: normal;
 					font-weight: normal;
 					text-transform: none !important;
+					display: inline-block;
+					margin: 0 0.5em 0 0;
+					transition: transform 0.3s ease;
 				}
 
-				#header > a[href="#menu"]:before {
-					margin: 0 0.5em 0 0;
+				#header > a[href="#menu"]:hover {
+					color: #F6D2E0;
+				}
+
+				#header > a[href="#menu"]:hover:before {
+					animation: wobble-bars 1s ease-in-out infinite;
 				}
 
 			#header > a + a[href="#menu"]:last-child {
@@ -290,10 +294,15 @@
 				font-weight: normal;
 				text-transform: none !important;
 				font-size: 1.25em;
+				display: inline-block;
 			}
 
 			#menu .close:hover {
-				color: #f2f2f2;
+				color: #F6D2E0;
+			}
+
+			#menu .close:hover:before {
+				animation: wobble-close 1s ease-in-out infinite;
 			}
 
 		#menu.visible {
@@ -336,6 +345,8 @@
 			color: #FFF;
 			font-size: 1.25rem;
 			margin-bottom: 3rem;
+			animation: textWave 3s ease-in-out infinite;
+			transform-origin: center;
 		}
 
 		#main a {
@@ -360,3 +371,67 @@
 				font-size: .8em;
 			}
 		}
+
+@keyframes wobble-bars {
+	0% {
+		content: "\f0c9";
+		transform: rotate(-2deg) scale(1);
+	}
+	25% {
+		content: "\f0c9";
+		transform: rotate(2deg) scale(1.05);
+	}
+	50% {
+		content: "\f0c9";
+		transform: rotate(-1deg) scale(1.07);
+	}
+	75% {
+		content: "\f0c9";
+		transform: rotate(1deg) scale(1.05);
+	}
+	100% {
+		content: "\f0c9";
+		transform: rotate(-2deg) scale(1);
+	}
+}
+
+@keyframes wobble-close {
+	0% {
+		transform: rotate(-2deg) scale(1);
+	}
+	25% {
+		transform: rotate(2deg) scale(1.05);
+	}
+	50% {
+		transform: rotate(-1deg) scale(1.07);
+	}
+	75% {
+		transform: rotate(1deg) scale(1.05);
+	}
+	100% {
+		transform: rotate(-2deg) scale(1);
+	}
+}
+
+@keyframes textWave {
+	0% {
+		transform: translateY(0) rotate(-0.3deg) scale(1);
+		opacity: 0.95;
+	}
+	25% {
+		transform: translateY(-1px) rotate(0.3deg) scale(1.005);
+		opacity: 1;
+	}
+	50% {
+		transform: translateY(0) rotate(-0.2deg) scale(1.003);
+		opacity: 0.97;
+	}
+	75% {
+		transform: translateY(1px) rotate(0.3deg) scale(1.005);
+		opacity: 1;
+	}
+	100% {
+		transform: translateY(0) rotate(-0.3deg) scale(1);
+		opacity: 0.95;
+	}
+}
