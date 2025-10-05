@@ -18,8 +18,7 @@
 
 		var	$window = $(window),
 			$body = $('body'),
-			$header = $('#header'),
-			$banner = $('#banner');
+			$header = $('#header');
 
 		// Disable animations/transitions until the page has loaded.
 			$body.addClass('is-loading');
@@ -38,89 +37,6 @@
 				);
 			});
 
-		// Fix: Placeholder polyfill.
-			$('form').placeholder();
-
-		// Header.
-			if (skel.vars.IEVersion < 9)
-				$header.removeClass('alt');
-
-			if ($banner.length > 0
-			&&	$header.hasClass('alt')) {
-
-				$window.on('resize', function() { $window.trigger('scroll'); });
-
-				$banner.scrollex({
-					bottom:		$header.outerHeight(),
-					terminate:	function() { $header.removeClass('alt'); },
-					enter:		function() { $header.addClass('alt'); },
-					leave:		function() { $header.removeClass('alt'); $header.addClass('reveal'); }
-				});
-
-			}
-
-		// Banner.
-
-			if ($banner.length > 0) {
-
-				// IE fix.
-					if (skel.vars.IEVersion < 12) {
-
-						$window.on('resize', function() {
-
-							var wh = $window.height() * 0.60,
-								bh = $banner.height();
-
-							$banner.css('height', 'auto');
-
-							window.setTimeout(function() {
-
-								if (bh < wh)
-									$banner.css('height', wh + 'px');
-
-							}, 0);
-
-						});
-
-						$window.on('load', function() {
-							$window.triggerHandler('resize');
-						});
-
-					}
-
-				// Video check.
-					var video = $banner.data('video');
-
-					if (video)
-						$window.on('load.banner', function() {
-
-							// Disable banner load event (so it doesn't fire again).
-								$window.off('load.banner');
-
-							// Append video if supported.
-								if (!skel.vars.mobile
-								&&	!skel.breakpoint('large').active
-								&&	skel.vars.IEVersion > 9)
-									$banner.append('<video autoplay loop><source src="' + video + '.mp4" type="video/mp4" /><source src="' + video + '.webm" type="video/webm" /></video>');
-
-						});
-
-				// More button.
-					$banner.find('.more')
-						.addClass('scrolly');
-
-			}
-
-		// Scrolly.
-			if ( $( ".scrolly" ).length ) {
-
-				var $height = $('#header').height() * 0.95;
-
-				$('.scrolly').scrolly({
-					offset: $height
-				});
-			}
-
 		// Menu.
 			$('#menu')
 				.append('<a href="#menu" class="close"></a>')
@@ -133,6 +49,31 @@
 					resetForms: true,
 					side: 'right'
 				});
+
+			// Add randomization to menu hover effects
+			$('#menu .links a').on('mouseenter', function() {
+				const angle = (Math.random() * 3 - 1.5) + 'deg';  // Random angle between -1.5 and 1.5 degrees
+				const position = (Math.random() * 0.1 + 0.15) + 'em';  // Random position between 0.15em and 0.25em
+				const duration = (Math.random() * 0.2 + 0.2) + 's';  // Random duration between 0.2s and 0.4s
+				
+				// Randomize squiggle control points with more variation
+				const x1 = (Math.random() * 15 + 10) + '%';  // Between 10% and 25%
+				const y1 = (Math.random() * 40 + 20) + '%';  // Between 20% and 60%
+				const x2 = (Math.random() * 15 + 75) + '%';  // Between 75% and 90%
+				const y2 = (Math.random() * 40 + 20) + '%';  // Between 20% and 60%
+				
+				// Add animation delay for more organic feel
+				const animDelay = (Math.random() * 0.2) + 's';
+				
+				this.style.setProperty('--underline-angle', angle);
+				this.style.setProperty('--underline-position', position);
+				this.style.setProperty('--animation-duration', duration);
+				this.style.setProperty('--squiggle-x1', x1);
+				this.style.setProperty('--squiggle-y1', y1);
+				this.style.setProperty('--squiggle-x2', x2);
+				this.style.setProperty('--squiggle-y2', y2);
+				this.style.setProperty('animation-delay', animDelay);
+			});
 
 	});
 
