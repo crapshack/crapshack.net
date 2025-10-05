@@ -1,0 +1,17 @@
+@theme {
+	/* semantic brand tokens */
+	--color-bg: #67a3d9;
+	--color-brand: #fdd0e0;
+	--color-sidebar-bg: #0671b7;
+	--color-text: #ffffff;
+	--color-sidebar-toggle-hover: #c8e7f5;
+}
+
+/* @media (prefers-color-scheme: dark) {
+	@theme {
+		--color-bg: #0f2437;
+		--color-brand: #fdd0e0;
+		--color-sidebar-bg: #3a8fd8;
+		--color-text: #e6eef7;
+	}
+} */

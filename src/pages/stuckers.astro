@@ -1,0 +1,148 @@
+---
+import Layout from '../layouts/Layout.astro';
+import type { ImageMetadata } from 'astro';
+import { Copy, CopyCheck } from '@lucide/astro';
+import logo from '../assets/stuckers/stuckers.png';
+import appStoreBadge from '../assets/stuckers/app-store.png';
+
+import popcorn from '../assets/stuckers/popcorn.gif';
+import spiral from '../assets/stuckers/spiral.gif';
+import milk from '../assets/stuckers/milk.gif';
+import hair from '../assets/stuckers/hair.gif';
+import brows from '../assets/stuckers/brows.gif';
+import blinky from '../assets/stuckers/blinky.gif';
+import testTube from '../assets/stuckers/test-tube.gif';
+import wine from '../assets/stuckers/wine.gif';
+import wink from '../assets/stuckers/wink.gif';
+import robot from '../assets/stuckers/robot.gif';
+
+type Sticker = { name: string; src: ImageMetadata; alt: string };
+
+const appStoreUrl = 'https://apps.apple.com/us/app/stuckers/id1173389437';
+
+const stickers: Sticker[] = [
+	{ name: 'popcorn', src: popcorn, alt: 'popcorn' },
+	{ name: 'spiral', src: spiral, alt: 'spiral' },
+	{ name: 'milk', src: milk, alt: 'milk' },
+	{ name: 'hair', src: hair, alt: 'hair' },
+	{ name: 'brows', src: brows, alt: 'brows scker' },
+	{ name: 'blinky', src: blinky, alt: 'blinky' },
+	{ name: 'test-tube', src: testTube, alt: 'test tube' },
+	{ name: 'wine', src: wine, alt: 'wine' },
+	{ name: 'wink', src: wink, alt: 'wink' },
+	{ name: 'robot', src: robot, alt: 'robot' },
+];
+---
+
+<Layout
+	title="Stuckers — stickers for phone"
+	ogImage="/open-graph/stuckers.gif"
+>
+	<section class="mx-auto max-w-5xl text-center space-y-6">
+		<!-- Top logo -->
+		<div class="flex items-center justify-center">
+			<img src={logo.src} alt="Stuckers logo" class="block h-auto" width="350" />
+		</div>
+
+		<!-- Subtitle -->
+		<p data-typed-text class="mb-10 text-white font-mono text-[clamp(18px,2.5vw,20px)]"><noscript>stickers for phone</noscript></p>
+
+		<!-- App Store link -->
+		<div>
+			<a
+				href={appStoreUrl}
+				target="_blank"
+				rel="noopener noreferrer"
+				aria-label="Download Stuckers on the App Store"
+				class="inline-block transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]"
+			>
+				<img src={appStoreBadge.src} alt="Download on the App Store" class="h-auto w-full max-w-[160px] sm:max-w-[180px]" />
+			</a>
+		</div>
+
+		<!-- Responsive, intrinsic grid of stickers -->
+		<div class="grid grid-cols-[repeat(auto-fit,minmax(10rem,1fr))] gap-4 sm:gap-6">
+			{stickers.map(({ name, src, alt }) => (
+				<figure class="group relative rounded-xl bg-white/70 p-2 shadow-sm aspect-square" data-sticker-tile data-copy-url={src.src}>
+					<img
+						src={src.src}
+						alt={alt}
+						loading="lazy"
+						decoding="async"
+						class="h-full w-full object-contain transition-opacity group-hover:opacity-60 group-focus-within:opacity-60 group-data-[mode=feedback]:opacity-40"
+					/>
+					<button
+						type="button"
+						class="absolute inset-0 z-[1] flex h-full w-full items-center justify-center cursor-pointer rounded-xl text-white opacity-0 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)] group-hover:opacity-100 group-focus-within:opacity-100 group-data-[active=true]:opacity-100"
+						data-copy-url={src.src}
+						data-tile-button
+						aria-label={`Copy link to ${name} GIF`}
+					>
+						<span class="inline-flex items-center gap-1.5 rounded-md bg-black/60 group-data-[mode=feedback]:bg-black/70 px-3 py-1.5 text-sm font-medium shadow-sm select-none">
+							<Copy width={16} height={16} stroke-width={2.25} stroke="#fff" aria-hidden="true" class="shrink-0 inline-block group-data-[mode=feedback]:hidden" />
+							<CopyCheck width={16} height={16} stroke-width={2.25} stroke="#fff" aria-hidden="true" class="shrink-0 hidden group-data-[mode=feedback]:inline-block" />
+							<span data-label class="font-mono">Copy link</span>
+						</span>
+					</button>
+				</figure>
+			))}
+		</div>
+
+		<script type="module">
+			import { typedText } from '/src/lib/typed-text.ts';
+			import { copyTextToClipboard, toAbsoluteUrl } from '/src/lib/clipboard.ts';
+			const el = document.querySelector('[data-typed-text]');
+			if (el) {
+				typedText(el, 'stickers for phone');
+			}
+
+			const tiles = Array.from(document.querySelectorAll('[data-sticker-tile]'));
+			for (const tile of tiles) {
+				const button = tile.querySelector('[data-tile-button]');
+				if (!(button instanceof HTMLButtonElement)) continue;
+				const label = button.querySelector('[data-label]');
+				if (!(label instanceof HTMLElement)) continue;
+				let feedbackTimer = null;
+				const defaultLabel = 'Copy link';
+				const feedbackLabel = 'Copied!';
+
+				const setMode = (mode) => {
+					if (mode === 'feedback') {
+						tile.setAttribute('data-active', 'true');
+						tile.setAttribute('data-mode', 'feedback');
+						label.textContent = feedbackLabel;
+					} else {
+						tile.removeAttribute('data-mode');
+						tile.removeAttribute('data-active');
+						label.textContent = defaultLabel;
+					}
+				};
+
+				button.addEventListener('click', async (ev) => {
+					ev.preventDefault();
+					const url = toAbsoluteUrl(button.getAttribute('data-copy-url') || '');
+					await copyTextToClipboard(url);
+					setMode('feedback');
+					if (feedbackTimer) window.clearTimeout(feedbackTimer);
+					feedbackTimer = window.setTimeout(() => setMode('default'), 1200);
+				});
+
+				// Touch: keep overlay visible on first tap via feedback path
+				tile.addEventListener('touchstart', (ev) => {
+					ev.stopPropagation();
+				}, { passive: true });
+			}
+
+			// Dismiss overlays when tapping outside any tile
+			document.addEventListener('touchstart', () => {
+				const all = Array.from(document.querySelectorAll('[data-sticker-tile][data-active]'));
+				for (const t of all) {
+					t.removeAttribute('data-mode');
+					t.removeAttribute('data-active');
+					const labelEl = t.querySelector('[data-tile-button] [data-label]');
+					if (labelEl instanceof HTMLElement) labelEl.textContent = 'Copy link';
+				}
+			}, { passive: true });
+		</script>
+	</section>
+</Layout>

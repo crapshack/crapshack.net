@@ -1,0 +1,49 @@
+---
+import { siteName, defaultTitle, defaultDescription, defaultOgImage } from '../lib/site';
+
+interface Props {
+  title?: string;
+  ogImage?: string; // public path or absolute URL
+  noIndex?: boolean;
+}
+
+const props = Astro.props as Props;
+
+const resolvedTitle = props.title ?? defaultTitle;
+const resolvedDescription = defaultDescription;
+const resolvedImage = props.ogImage ?? defaultOgImage;
+
+// Build absolute URLs where needed
+const url = new URL(Astro.url.pathname + Astro.url.search, Astro.site ?? 'http://localhost');
+const imageUrl = resolvedImage.startsWith('http')
+  ? resolvedImage
+  : new URL(resolvedImage, Astro.site ?? url).toString();
+
+const videoPath = '/open-graph/blinky.mp4';
+const videoUrl = new URL(videoPath, Astro.site ?? url).toString();
+
+const robots = props.noIndex ? 'noindex,follow' : 'index,follow';
+---
+<title>{resolvedTitle}</title>
+<meta name="description" content={resolvedDescription} />
+<link rel="canonical" href={url.toString()} />
+<meta name="robots" content={robots} />
+
+<!-- Open Graph -->
+<meta property="og:title" content={resolvedTitle} />
+<meta property="og:description" content={resolvedDescription} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={url.toString()} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:video" content={videoUrl} />
+<meta property="og:video:secure_url" content={videoUrl} />
+<meta property="og:video:type" content="video/mp4" />
+<meta property="og:video:width" content="850" />
+<meta property="og:video:height" content="480" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={resolvedTitle} />
+<meta name="twitter:description" content={resolvedDescription} />
+<meta name="twitter:image" content={imageUrl} />

@@ -1,0 +1,28 @@
+<div class="grid grid-flow-row justify-items-center">
+	<p data-aphorism class="mb-10 text-white font-mono text-[clamp(18px,2.5vw,20px)]"><noscript>a dead dream</noscript></p>
+<img data-random aria-hidden="true" width="240" height="240" decoding="async" loading="eager" fetchpriority="high" class="block opacity-0" />
+</div>
+<script type="module">
+	import { pickAphorism } from '/src/lib/aphorisms.ts';
+	import { typedText } from '/src/lib/typed-text.ts';
+
+	const target = document.querySelector('[data-aphorism]');
+	const picked = pickAphorism();
+
+	if (target && picked) {
+		typedText(target, picked.text);
+	}
+
+	const image = document.querySelector('[data-random]');
+	const imageChoices = [
+		new URL('/src/assets/stuckers/blinky.gif', import.meta.url).href,
+		new URL('/src/assets/stuckers/robot.gif', import.meta.url).href,
+	];
+	if (image) {
+		const chosen = imageChoices[Math.floor(Math.random() * imageChoices.length)];
+		image.setAttribute('src', chosen);
+		image.addEventListener('load', () => {
+			image.classList.remove('opacity-0');
+		}, { once: true });
+	}
+</script>
