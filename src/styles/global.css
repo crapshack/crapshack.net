@@ -9,9 +9,6 @@
 		height: 100%;
 	}
 
-	/* Opt into stable layout when scrollbars appear/disappear in supporting browsers */
-	html { scrollbar-gutter: stable both-edges; }
-
 	body {
 		background-color: var(--color-bg);
 		font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
