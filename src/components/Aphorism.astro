@@ -2,21 +2,21 @@
 	<p data-aphorism class="mb-10 text-white font-mono text-[clamp(18px,2.5vw,20px)]"><noscript>a dead dream</noscript></p>
 <img data-random aria-hidden="true" width="240" height="240" decoding="async" loading="eager" fetchpriority="high" class="block opacity-0" />
 </div>
-<script type="module">
-	import { pickAphorism } from '/src/lib/aphorisms.ts';
-	import { typedText } from '/src/lib/typed-text.ts';
+<script>
+	import { pickAphorism } from '../lib/aphorisms.ts';
+	import { typedText } from '../lib/typed-text.ts';
 
-	const target = document.querySelector('[data-aphorism]');
+	const target = document.querySelector<HTMLElement>('[data-aphorism]');
 	const picked = pickAphorism();
 
 	if (target && picked) {
 		typedText(target, picked.text);
 	}
 
-	const image = document.querySelector('[data-random]');
+	const image = document.querySelector<HTMLImageElement>('[data-random]');
 	const imageChoices = [
-		new URL('/src/assets/stuckers/blinky.gif', import.meta.url).href,
-		new URL('/src/assets/stuckers/robot.gif', import.meta.url).href,
+		'images/stuckers/blinky.gif',
+		'images/stuckers/robot.gif',
 	];
 	if (image) {
 		const chosen = imageChoices[Math.floor(Math.random() * imageChoices.length)];
