@@ -48,15 +48,15 @@ const stickers: Sticker[] = [
 		<!-- Responsive, intrinsic grid of stickers -->
 		<div class="grid grid-cols-[repeat(auto-fit,minmax(10rem,1fr))] gap-4 sm:gap-6">
 			{stickers.map(({ name, src, alt }) => (
-				<figure class="group relative rounded-xl bg-white/70 p-2 shadow-sm aspect-square" data-sticker-tile data-copy-url={src}>
+				<figure class="group relative rounded-xl bg-white/70 p-2 shadow-md aspect-square" data-sticker-tile data-copy-url={src}>
 					<img
 						src={src}
 						alt={alt}
 						width="480"
 						height="480"
-						loading="lazy"
 						decoding="async"
-						class="h-full w-full object-contain transition-opacity group-hover:opacity-60 group-focus-within:opacity-60 group-data-[mode=feedback]:opacity-40"
+						data-sticker-img
+						class="h-full w-full object-contain transition-opacity duration-300 opacity-0 group-hover:opacity-60 group-focus-within:opacity-60 group-data-[mode=feedback]:opacity-40"
 					/>
 					<button
 						type="button"
@@ -81,6 +81,30 @@ const stickers: Sticker[] = [
 			const el = document.querySelector<HTMLElement>('[data-typed-text]');
 			if (el) {
 				typedText(el, 'stickers for phone');
+			}
+
+			// Fade in sticker images as they load with staggered timing
+			const stickerImages = Array.from(document.querySelectorAll('[data-sticker-img]'));
+			for (let i = 0; i < stickerImages.length; i++) {
+				const img = stickerImages[i];
+				if (!(img instanceof HTMLImageElement)) continue;
+				
+				const staggerDelay = i * 40; // 40ms delay between each image
+				
+				const fadeIn = () => {
+					setTimeout(() => {
+						img.classList.remove('opacity-0');
+						img.classList.add('opacity-100');
+					}, staggerDelay);
+				};
+				
+				if (img.complete) {
+					// Image already loaded (cached)
+					fadeIn();
+				} else {
+					// Fade in when image loads
+					img.addEventListener('load', fadeIn, { once: true });
+				}
 			}
 
 			const tiles = Array.from(document.querySelectorAll('[data-sticker-tile]'));
