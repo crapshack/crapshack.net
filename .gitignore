@@ -26,3 +26,6 @@ Icon?
 
 # VSCode
 .vscode/
+
+# Local env file
+.env.local

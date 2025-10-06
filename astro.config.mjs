@@ -3,8 +3,10 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
+const SITE_URL = process.env.SITE_URL || 'https://crapshack.net';
+
 export default defineConfig({
-	site: 'https://crapshack.net',
+	site: SITE_URL,
 	server: {
 		host: true,
 	},
