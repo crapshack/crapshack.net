@@ -2,7 +2,6 @@
 import '../styles/global.css';
 import Sidebar from '../components/Sidebar.astro';
 import Seo from '../components/Seo.astro';
-import { defaultTitle } from '../lib/site';
 import { PanelRight, PanelRightClose } from '@lucide/astro';
 interface Props {
   title?: string;
@@ -11,7 +10,6 @@ interface Props {
 }
 
 const { title, ogImage, noIndex } = Astro.props as Props;
-const resolvedTitle = title ?? defaultTitle;
 ---
 <!doctype html>
 <html lang="en">
@@ -20,7 +18,7 @@ const resolvedTitle = title ?? defaultTitle;
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<Seo title={resolvedTitle} ogImage={ogImage} noIndex={noIndex} />
+		<Seo title={title} ogImage={ogImage} noIndex={noIndex} />
 		<slot name="head" />
 	</head>
 	<body>
