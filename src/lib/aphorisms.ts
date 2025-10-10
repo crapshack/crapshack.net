@@ -7,7 +7,6 @@ const aphorisms: Aphorism[] = [
 	{ text: 'deeply, unfathomably, senselessly, terribly', weight: 3 },
 	{ text: 'everything on earth with you' },
 	{ text: 'in case you ever foolishly forget' },
-	{ text: 'desperate attempt to sound like someone new' },
 	{ text: 'obscure popular culture' },
 	{ text: 'untenable but inalterable' },
 	{ text: "it's got lots to do with magnets" },
