@@ -1,8 +1,5 @@
-# Crapshack (a dead dream)
-Crapshack is a website built specifically for u.
+# crapshack [dot] net
 
-<img src="www/images/blinky.gif" alt="blinky" width="200"/>
-
-## Links
-
-https://crapshack.net/
+<p align="center">
+  <img src="public/images/stuckers/blinky.gif" alt="blinky" width="200"/>
+</p>

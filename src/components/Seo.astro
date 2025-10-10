@@ -1,0 +1,53 @@
+---
+const siteName = 'crapshack';
+const defaultTitle = 'crapshack';
+const defaultDescription = 'website for u';
+const defaultOgImage = '/open-graph/blinky.png';
+const defaultOgVideoPath = '/open-graph/blinky.mp4';
+const defaultOgVideoType = 'video/mp4';
+const defaultOgVideoWidth = 850;
+const defaultOgVideoHeight = 480;
+
+interface Props {
+  title?: string;
+  ogImage?: string; // public path or absolute URL
+  noIndex?: boolean;
+}
+
+const props = Astro.props as Props;
+
+const resolvedTitle = props.title ?? `${defaultTitle} (${defaultDescription})`;
+const resolvedDescription = defaultDescription;
+const resolvedImage = props.ogImage ?? defaultOgImage;
+
+// Build absolute URLs using a single source of truth: Astro.site
+const url = new URL(Astro.url.pathname + Astro.url.search, Astro.site);
+const imageUrl = new URL(resolvedImage, Astro.site).toString();
+
+const videoUrl = new URL(defaultOgVideoPath, Astro.site).toString();
+
+const robots = props.noIndex ? 'noindex,follow' : 'index,follow';
+---
+<title>{resolvedTitle}</title>
+<meta name="description" content={resolvedDescription} />
+<link rel="canonical" href={url.toString()} />
+<meta name="robots" content={robots} />
+
+<!-- Open Graph -->
+<meta property="og:title" content={resolvedTitle} />
+<meta property="og:description" content={resolvedDescription} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={url.toString()} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:video" content={videoUrl} />
+<meta property="og:video:secure_url" content={videoUrl} />
+<meta property="og:video:type" content={defaultOgVideoType} />
+<meta property="og:video:width" content={String(defaultOgVideoWidth)} />
+<meta property="og:video:height" content={String(defaultOgVideoHeight)} />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={resolvedTitle} />
+<meta name="twitter:description" content={resolvedDescription} />
+<meta name="twitter:image" content={imageUrl} />

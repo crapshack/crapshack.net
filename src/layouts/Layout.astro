@@ -1,0 +1,56 @@
+---
+import '../styles/global.css';
+import Sidebar from '../components/Sidebar.astro';
+import Seo from '../components/Seo.astro';
+import { PanelRight, PanelRightClose } from '@lucide/astro';
+interface Props {
+  title?: string;
+  ogImage?: string;
+  noIndex?: boolean;
+}
+
+const { title, ogImage, noIndex } = Astro.props as Props;
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<Seo title={title} ogImage={ogImage} noIndex={noIndex} />
+		<slot name="head" />
+	</head>
+	<body>
+		<header>
+			<div class="header-inner">
+				<button
+					id="sidebar-toggle"
+					class="group fixed right-3 top-3 z-[110] p-2 rounded-md text-[var(--color-text)]/80 hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]"
+					aria-label="Open menu"
+					aria-controls="site-sidebar"
+					aria-expanded="false"
+					aria-keyshortcuts="Meta+B Control+B"
+					type="button"
+				>
+					<span class="sr-only">Toggle menu</span>
+					<span aria-hidden="true" class="relative block">
+					<span class="block group-aria-expanded:hidden">
+							<PanelRight width={20} height={20} stroke-width={2.5} />
+						</span>
+					<span class="hidden group-aria-expanded:block">
+						<PanelRightClose width={20} height={20} stroke-width={2.5} />
+						</span>
+					</span>
+				</button>
+			</div>
+		</header>
+		<main>
+			<slot />
+		</main>
+		<Sidebar />
+		<script src="../scripts/sidebar.ts"></script>
+		<script src="../scripts/weather.ts"></script>
+		<div class="weather-container" id="weather-container" aria-hidden="true"></div>
+	</body>
+</html>
