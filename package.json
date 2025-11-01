@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@lucide/astro": "^0.544.0",
-    "astro": "^5.14.1",
+    "astro": "^5.15.3",
     "serve": "^14.2.5"
   },
   "devDependencies": {
