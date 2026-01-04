@@ -1,0 +1,62 @@
+---
+import { X } from '@lucide/astro';
+
+interface Props {
+	id: string;
+	class?: string;
+	/** Max width of the dialog content. Defaults to 'max-w-2xl' */
+	maxWidth?: string;
+	/** Accessible name for the dialog */
+	ariaLabel: string;
+}
+
+const { id, class: className, maxWidth = 'max-w-2xl', ariaLabel } = Astro.props;
+---
+
+<div
+	id={id}
+	class="dialog-root"
+	data-open="false"
+	role="dialog"
+	aria-modal="true"
+	aria-hidden="true"
+	aria-label={ariaLabel}
+>
+	<div class="dialog-backdrop" data-dialog-backdrop></div>
+	<div class={`dialog-container ${maxWidth} ${className ?? ''}`} tabindex="-1">
+		<button
+			type="button"
+			class="dialog-close"
+			data-dialog-close
+			aria-label="Close dialog"
+		>
+			<X width={20} height={20} stroke-width={2.5} />
+		</button>
+		<div class="dialog-content">
+			<slot />
+		</div>
+	</div>
+</div>
+
+<script>
+	import { initAllDialogs } from '../../lib/ui/dialog';
+
+	if (typeof window !== 'undefined') {
+		// Guard to avoid wiring multiple listeners when component is rendered multiple times
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore allow attaching a flag on window
+		if (!window.__dialogInitRegistered) {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore allow attaching a flag on window
+			window.__dialogInitRegistered = true;
+
+			const runDialogInit = () => initAllDialogs();
+
+			if (document.readyState === 'loading') {
+				document.addEventListener('DOMContentLoaded', runDialogInit, { once: true });
+			} else {
+				runDialogInit();
+			}
+		}
+	}
+</script>
