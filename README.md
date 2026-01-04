@@ -1,5 +1,4 @@
-# crapshack [dot] net
-
-<p align="center">
+<div align="center">
   <img src="public/images/stuckers/blinky.gif" alt="blinky" width="200"/>
-</p>
+  <h1 style="margin: 12px 0 0; font-size: 2.4rem; border: 0;">crapshack [dot] net</h1>
+</div>

@@ -1,0 +1,50 @@
+---
+import { X } from '@lucide/astro';
+
+interface Props {
+	id: string;
+	class?: string;
+	/** Max width of the dialog content. Defaults to 'max-w-2xl' */
+	maxWidth?: string;
+}
+
+const { id, class: className, maxWidth = 'max-w-2xl' } = Astro.props;
+---
+
+<div
+	id={id}
+	class="dialog-root"
+	data-open="false"
+	role="dialog"
+	aria-modal="true"
+	aria-hidden="true"
+>
+	<div class="dialog-backdrop" data-dialog-backdrop></div>
+	<div class={`dialog-container ${maxWidth} ${className ?? ''}`} tabindex="-1">
+		<button
+			type="button"
+			class="dialog-close"
+			data-dialog-close
+			aria-label="Close dialog"
+		>
+			<X width={20} height={20} stroke-width={2.5} />
+		</button>
+		<div class="dialog-content">
+			<slot />
+		</div>
+	</div>
+</div>
+
+<script>
+	import { initAllDialogs } from '../../lib/dialog';
+
+	// Initialize all dialogs on page load
+	document.addEventListener('DOMContentLoaded', () => {
+		initAllDialogs();
+	});
+
+	// Also run immediately in case DOM is already ready
+	if (document.readyState !== 'loading') {
+		initAllDialogs();
+	}
+</script>

@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Dialog from '../components/ui/Dialog.astro';
+import ToggleGroup from '../components/ui/ToggleGroup.astro';
 import { Copy, Check } from '@lucide/astro';
 
 const repoUrl = 'https://github.com/crapshack/crapdash';
@@ -38,9 +40,41 @@ const screenshotDark = '/images/crapdash/screen-grab-dark.png';
 		</div>
 
 		<div class="screenshots grid grid-cols-1 sm:grid-cols-2 gap-4">
-			<img src={screenshotLight} alt="crapdash (light mode)" class="rounded-xl border border-white/10 shadow-lg opacity-0 transition-opacity duration-300" data-screenshot loading="lazy" />
-			<img src={screenshotDark} alt="crapdash (dark mode)" class="rounded-xl border border-white/10 shadow-lg opacity-0 transition-opacity duration-300" data-screenshot loading="lazy" />
+			<button
+				type="button"
+				class="screenshot-trigger group relative rounded-xl overflow-hidden border border-white/10 shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]"
+				data-screenshot-trigger
+				data-src={screenshotLight}
+				data-alt="crapdash (light mode)"
+			>
+				<img src={screenshotLight} alt="crapdash (light mode)" class="w-full h-auto opacity-0 transition-all duration-300 group-hover:scale-[1.02]" data-screenshot loading="lazy" />
+				<span class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200 pointer-events-none"></span>
+			</button>
+			<button
+				type="button"
+				class="screenshot-trigger group relative rounded-xl overflow-hidden border border-white/10 shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]"
+				data-screenshot-trigger
+				data-src={screenshotDark}
+				data-alt="crapdash (dark mode)"
+			>
+				<img src={screenshotDark} alt="crapdash (dark mode)" class="w-full h-auto opacity-0 transition-all duration-300 group-hover:scale-[1.02]" data-screenshot loading="lazy" />
+				<span class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200 pointer-events-none"></span>
+			</button>
 		</div>
+
+		<Dialog id="screenshot-dialog" maxWidth="max-w-4xl">
+			<img id="screenshot-dialog-img" src="" alt="" class="w-full h-auto rounded-lg" />
+			<div class="flex justify-center">
+				<ToggleGroup
+					name="screenshot-mode"
+					options={[
+						{ value: 'light', label: 'light' },
+						{ value: 'dark', label: 'dark' },
+					]}
+					defaultValue="light"
+				/>
+			</div>
+		</Dialog>
 
 		<section class="space-y-3">
 			<h2 class="text-2xl font-mono font-semibold text-[var(--color-text)]"># Features</h2>
@@ -82,6 +116,7 @@ const screenshotDark = '/images/crapdash/screen-grab-dark.png';
 
 <script>
 	import { copyTextToClipboard } from '../lib/clipboard';
+	import { openDialog } from '../lib/dialog';
 
 	// Fade in screenshots on load
 	const screenshots = document.querySelectorAll<HTMLImageElement>('[data-screenshot]');
@@ -98,6 +133,57 @@ const screenshotDark = '/images/crapdash/screen-grab-dark.png';
 			img.addEventListener('load', fadeIn, { once: true });
 		}
 	});
+
+	// Screenshot dialog
+	const screenshotTriggers = document.querySelectorAll<HTMLButtonElement>('[data-screenshot-trigger]');
+	const dialogImg = document.getElementById('screenshot-dialog-img') as HTMLImageElement | null;
+	const toggleGroup = document.querySelector<HTMLElement>('[data-toggle-group="screenshot-mode"]');
+
+	// Screenshot sources
+	const screenshotSources: Record<string, { src: string; alt: string }> = {
+		light: { src: '/images/crapdash/screen-grab-light.png', alt: 'crapdash (light mode)' },
+		dark: { src: '/images/crapdash/screen-grab-dark.png', alt: 'crapdash (dark mode)' },
+	};
+
+	function setScreenshot(mode: string) {
+		if (!dialogImg) return;
+		const source = screenshotSources[mode];
+		if (source) {
+			dialogImg.src = source.src;
+			dialogImg.alt = source.alt;
+		}
+	}
+
+	function setToggleValue(name: string, value: string) {
+		const radio = document.querySelector<HTMLInputElement>(
+			`[data-toggle-group="${name}"] input[value="${value}"]`
+		);
+		if (radio) {
+			radio.checked = true;
+		}
+	}
+
+	screenshotTriggers.forEach((trigger) => {
+		trigger.addEventListener('click', () => {
+			const src = trigger.dataset.src;
+			const alt = trigger.dataset.alt;
+			if (dialogImg && src) {
+				dialogImg.src = src;
+				dialogImg.alt = alt ?? '';
+
+				// Set toggle to match clicked screenshot
+				const mode = src.includes('light') ? 'light' : 'dark';
+				setToggleValue('screenshot-mode', mode);
+
+				openDialog('screenshot-dialog');
+			}
+		});
+	});
+
+	// Listen for toggle changes
+	toggleGroup?.addEventListener('toggle-change', ((e: CustomEvent<{ value: string }>) => {
+		setScreenshot(e.detail.value);
+	}) as EventListener);
 
 	// Copy button
 	const copyBtn = document.getElementById('copy-btn');

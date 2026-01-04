@@ -1,0 +1,59 @@
+---
+interface Option {
+	value: string;
+	label: string;
+}
+
+interface Props {
+	/** Unique name for the radio group */
+	name: string;
+	/** Array of options with value and label */
+	options: Option[];
+	/** Initially selected value */
+	defaultValue?: string;
+	/** Additional class for the container */
+	class?: string;
+}
+
+const { name, options, defaultValue, class: className } = Astro.props;
+const selectedValue = defaultValue ?? options[0]?.value;
+---
+
+<div
+	class={`toggle-group ${className ?? ''}`}
+	role="radiogroup"
+	data-toggle-group={name}
+>
+	{options.map((option) => (
+		<label class="toggle-option">
+			<input
+				type="radio"
+				name={name}
+				value={option.value}
+				checked={option.value === selectedValue}
+				class="sr-only"
+			/>
+			<span class="toggle-label">{option.label}</span>
+		</label>
+	))}
+</div>
+
+<script>
+	// Emit custom event when toggle changes
+	document.querySelectorAll<HTMLElement>('[data-toggle-group]').forEach((group) => {
+		const radios = group.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+
+		radios.forEach((radio) => {
+			radio.addEventListener('change', () => {
+				if (radio.checked) {
+					group.dispatchEvent(
+						new CustomEvent('toggle-change', {
+							detail: { value: radio.value },
+							bubbles: true,
+						})
+					);
+				}
+			});
+		});
+	});
+</script>
