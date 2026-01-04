@@ -106,7 +106,9 @@ export function closeDialog(id: string): void {
 	}
 
 	// Restore body scroll
-	document.body.style.overflow = '';
+	if (openDialogStack.length === 0) {
+		document.body.style.overflow = '';
+	}
 
 	// Return focus to trigger element
 	const trigger = triggerMap.get(dialog);
