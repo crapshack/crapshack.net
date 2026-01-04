@@ -57,11 +57,15 @@ class SidebarController {
       this.lastInteraction = 'keyboard';
     });
 
-    // Close after clicking any link within the sidebar
+    // Close after clicking any link within the sidebar (but not ctrl/cmd/middle-click for new tab)
     this.sidebar.addEventListener('click', (e) => {
       const target = e.target as HTMLElement | null;
       if (target && target.closest('a')) {
-        this.close();
+        // Don't close if user is opening in a new tab
+        const isNewTabClick = e.ctrlKey || e.metaKey || e.button === 1;
+        if (!isNewTabClick) {
+          this.close();
+        }
       }
     });
 
