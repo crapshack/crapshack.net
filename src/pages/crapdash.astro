@@ -62,7 +62,7 @@ const screenshotDark = '/images/crapdash/screen-grab-dark.png';
 			</button>
 		</div>
 
-		<Dialog id="screenshot-dialog" maxWidth="max-w-4xl">
+		<Dialog id="screenshot-dialog" maxWidth="max-w-4xl" ariaLabel="screengrab preview dialog">
 			<img id="screenshot-dialog-img" src="" alt="" class="w-full h-auto rounded-lg" />
 			<div class="flex justify-center">
 				<ToggleGroup
@@ -72,6 +72,7 @@ const screenshotDark = '/images/crapdash/screen-grab-dark.png';
 						{ value: 'dark', label: 'dark' },
 					]}
 					defaultValue="light"
+					ariaLabel="Switch screengrab"
 				/>
 			</div>
 		</Dialog>
