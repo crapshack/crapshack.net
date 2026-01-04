@@ -26,7 +26,7 @@ const { title, ogImage, noIndex } = Astro.props as Props;
 			<div class="header-inner">
 				<button
 					id="sidebar-toggle"
-					class="group fixed right-3 top-3 z-[110] p-2 rounded-md text-[var(--color-text)]/80 hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]"
+					class="group fixed right-3 top-3 z-[110] p-1.5 rounded-md text-white hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)] aria-[expanded=false]:bg-[var(--color-sidebar-bg)] transition-colors"
 					aria-label="Open menu"
 					aria-controls="site-sidebar"
 					aria-expanded="false"
@@ -36,10 +36,10 @@ const { title, ogImage, noIndex } = Astro.props as Props;
 					<span class="sr-only">Toggle menu</span>
 					<span aria-hidden="true" class="relative block">
 					<span class="block group-aria-expanded:hidden">
-							<PanelRight width={20} height={20} stroke-width={2.5} />
+							<PanelRight width={18} height={18} stroke-width={2} />
 						</span>
 					<span class="hidden group-aria-expanded:block">
-						<PanelRightClose width={20} height={20} stroke-width={2.5} />
+						<PanelRightClose width={18} height={18} stroke-width={2} />
 						</span>
 					</span>
 				</button>
