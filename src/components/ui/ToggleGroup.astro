@@ -39,25 +39,8 @@ const selectedValue = defaultValue ?? options[0]?.value;
 </div>
 
 <script>
-	// Bind only within this component instance to avoid duplicate listeners
-	const scriptEl = document.currentScript;
-	const group = scriptEl?.previousElementSibling as HTMLElement | null;
+	import { initToggleGroups } from '../../lib/ui/toggle-group';
 
-	if (group && group.matches('[data-toggle-group]') && !group.dataset.tgBound) {
-		group.dataset.tgBound = 'true';
-		const radios = group.querySelectorAll<HTMLInputElement>('input[type="radio"]');
-
-		radios.forEach((radio) => {
-			radio.addEventListener('change', () => {
-				if (radio.checked) {
-					group.dispatchEvent(
-						new CustomEvent('toggle-change', {
-							detail: { value: radio.value },
-							bubbles: true,
-						})
-					);
-				}
-			});
-		});
-	}
+	// Single delegated listener for all toggle groups
+	initToggleGroups();
 </script>

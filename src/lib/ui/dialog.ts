@@ -134,4 +134,3 @@ export function initAllDialogs(): void {
 	const dialogs = document.querySelectorAll<HTMLElement>('.dialog-root');
 	dialogs.forEach((dialog) => initDialog(dialog));
 }
-
