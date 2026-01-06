@@ -5,7 +5,6 @@ import ToggleGroup from '../components/ui/ToggleGroup.astro';
 import { Copy, Check, Container } from '@lucide/astro';
 
 const repoUrl = 'https://github.com/austin-smith/crapdash';
-const issuesUrl = 'https://github.com/austin-smith/crapdash/issues';
 const releasesUrl = 'https://github.com/austin-smith/crapdash/releases';
 const dockerUrl = 'https://github.com/austin-smith/crapdash/pkgs/container/crapdash';
 const iconUrl = '/images/crapdash/compy.png';
@@ -30,14 +29,11 @@ const screenshotDark = '/images/crapdash/screen-grabs/screen-grab-dark.png';
 		<div class="flex flex-wrap gap-3">
 			<a href={repoUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-md bg-[var(--color-brand)] px-4 py-2 font-medium hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/70">
 				<img src="/images/brands/github.svg" alt="" aria-hidden="true" class="mr-2 h-4 w-4" />
-				<span>view on github</span>
+				<span>github</span>
 			</a>
 			<a href={dockerUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-md border border-white/20 px-4 py-2 font-medium text-[var(--color-text)] hover:text-[var(--color-brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/70">
 				<Container width={16} height={16} stroke-width={2} class="mr-2" />
 				<span>docker image</span>
-			</a>
-			<a href={issuesUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-md border border-white/20 px-4 py-2 font-medium text-[var(--color-text)] hover:text-[var(--color-brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/70">
-				support / issues
 			</a>
 		</div>
 
@@ -88,30 +84,41 @@ const screenshotDark = '/images/crapdash/screen-grabs/screen-grab-dark.png';
 			</ul>
 		</section>
 
-		<section class="space-y-3">
-			<h2 class="text-2xl font-mono font-semibold text-[var(--color-text)]"># Quick Start</h2>
-			<p class="text-white/95">Pull and run the Docker image:</p>
-			<div class="relative group">
-				<pre class="bg-black/40 rounded-lg p-4 pr-12 overflow-x-auto text-sm"><code id="docker-command" class="text-white/90">docker run -d \
+	<section class="space-y-3">
+		<h2 class="text-2xl font-mono font-semibold text-[var(--color-text)]"># Quick Start</h2>
+		<p class="text-white/95">Deploy with Docker:</p>
+		<div class="flex justify-start mb-3">
+			<ToggleGroup
+				name="docker-method"
+				options={[
+					{ value: 'docker', label: 'run' },
+					{ value: 'compose', label: 'compose' },
+				]}
+				defaultValue="docker"
+				ariaLabel="Switch deployment method"
+			/>
+		</div>
+		<div class="relative group">
+			<pre class="bg-black/40 rounded-lg p-4 pr-12 overflow-x-auto text-sm"><code id="docker-command" class="text-white/90">docker run -d \
   --name crapdash \
   -p 2727:2727 \
   --mount type=bind,source=/path/to/data,target=/app/data \
   --restart=unless-stopped \
   ghcr.io/austin-smith/crapdash:latest</code></pre>
-				<button
-					id="copy-btn"
-					type="button"
-					class="absolute top-3 right-3 p-1.5 rounded-md bg-white/10 text-white/60 hover:text-white hover:bg-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/70"
-					aria-label="Copy to clipboard"
-				>
-					<Copy id="copy-icon" width={16} height={16} stroke-width={2} />
-					<Check id="check-icon" class="hidden" width={16} height={16} stroke-width={2} />
-				</button>
-			</div>
-			<p class="text-white/80 text-sm">
-				Or grab a <a class="underline decoration-[var(--color-brand)] underline-offset-4 hover:text-[var(--color-brand)]" href={releasesUrl} target="_blank" rel="noopener noreferrer">prebuilt bundle</a> for standalone Node.js deployment.
-			</p>
-		</section>
+			<button
+				id="copy-btn"
+				type="button"
+				class="absolute top-3 right-3 p-1.5 rounded-md bg-white/10 text-white/60 hover:text-white hover:bg-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-brand)]/70"
+				aria-label="Copy to clipboard"
+			>
+				<Copy id="copy-icon" width={16} height={16} stroke-width={2} />
+				<Check id="check-icon" class="hidden" width={16} height={16} stroke-width={2} />
+			</button>
+		</div>
+		<p class="text-white/95 pt-2">
+			Or download a <a class="underline decoration-[var(--color-brand)] underline-offset-4 hover:text-[var(--color-brand)]" href={releasesUrl} target="_blank" rel="noopener noreferrer">prebuilt bundle</a> for standalone Node.js deployment.
+		</p>
+	</section>
 	</section>
 </Layout>
 
@@ -186,9 +193,42 @@ const screenshotDark = '/images/crapdash/screen-grabs/screen-grab-dark.png';
 		setScreenshot(e.detail.value);
 	}) as EventListener);
 
+	// Docker method toggle
+	const dockerMethodToggle = document.querySelector<HTMLElement>('[data-toggle-group="docker-method"]');
+	const codeEl = document.getElementById('docker-command');
+
+	const deploymentMethods: Record<string, string> = {
+		docker: `docker run -d \\
+  --name crapdash \\
+  -p 2727:2727 \\
+  --mount type=bind,source=/path/to/data,target=/app/data \\
+  --restart=unless-stopped \\
+  ghcr.io/austin-smith/crapdash:latest`,
+		compose: `services:
+  crapdash:
+    image: ghcr.io/austin-smith/crapdash:latest
+    container_name: crapdash
+    restart: unless-stopped
+    ports:
+      - "2727:2727"
+    volumes:
+      - ./crapdash:/app/data`,
+	};
+
+	function setDeploymentMethod(method: string) {
+		if (!codeEl) return;
+		const snippet = deploymentMethods[method];
+		if (snippet) {
+			codeEl.textContent = snippet;
+		}
+	}
+
+	dockerMethodToggle?.addEventListener('toggle-change', ((e: CustomEvent<{ value: string }>) => {
+		setDeploymentMethod(e.detail.value);
+	}) as EventListener);
+
 	// Copy button
 	const copyBtn = document.getElementById('copy-btn');
-	const codeEl = document.getElementById('docker-command');
 	const copyIcon = document.getElementById('copy-icon');
 	const checkIcon = document.getElementById('check-icon');
 
