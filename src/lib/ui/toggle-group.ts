@@ -16,9 +16,19 @@ function updateSliderPosition(group: HTMLElement, targetLabel: HTMLElement): voi
 	const groupRect = group.getBoundingClientRect();
 	const labelRect = targetLabel.getBoundingClientRect();
 
-	// Calculate position relative to the group's padding (0.25rem = 4px at default scale)
-	// The slider starts at left: 0.25rem, so we need to offset from there
-	const left = labelRect.left - groupRect.left - 4; // Subtract the initial 0.25rem offset
+	// Calculate position relative to the slider's inline start (respects padding/RTL)
+	// Use computed styles so rem changes or custom padding stay accurate
+	const groupStyles = getComputedStyle(group);
+	const sliderStyles = getComputedStyle(slider);
+	const offsetCandidates = [
+		parseFloat(sliderStyles.insetInlineStart || ''),
+		parseFloat(sliderStyles.left || ''),
+		parseFloat(groupStyles.paddingInlineStart || ''),
+		parseFloat(groupStyles.paddingLeft || ''),
+	];
+	// Prefer logical (inline) offsets; fall back to physical left; ignore NaN
+	const startOffset = offsetCandidates.find((value) => Number.isFinite(value)) ?? 0;
+	const left = labelRect.left - groupRect.left - startOffset;
 	const width = labelRect.width;
 
 	slider.style.transform = `translateX(${left}px)`;
