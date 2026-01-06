@@ -312,6 +312,13 @@
 		mask: url('/images/brands/apple.svg') center/contain no-repeat;
 		-webkit-mask: url('/images/brands/apple.svg') center/contain no-repeat;
 	}
+
+	.icon-github {
+		display: inline-block;
+		background-color: currentColor;
+		mask: url('/images/brands/github-white.svg') center/contain no-repeat;
+		-webkit-mask: url('/images/brands/github-white.svg') center/contain no-repeat;
+	}
 }
 
 @layer utilities {

@@ -110,6 +110,18 @@ class SidebarController {
     }
 
     if (!this.isOpen) return;
+    
+    // "i" key toggles info section (version/github)
+    if (e.key.toLowerCase() === 'i' && !this.isEditableTarget(e.target as Element | null)) {
+      e.preventDefault();
+      const infoEl = document.getElementById('sidebar-info');
+      if (infoEl) {
+        infoEl.classList.toggle('hidden');
+        infoEl.classList.toggle('flex');
+      }
+      return;
+    }
+    
     if (e.key === 'Escape') {
       e.preventDefault();
       this.close();
